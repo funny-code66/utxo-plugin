@@ -1,0 +1,16 @@
+git+https://github.com/spesmilo/electrumx.git@master#egg=e-x
+x11_hash==1.4
+quark_hash==1.0
+x16r-hash==1.0.1
+x16rv2-hash==1.0
+uvloop==0.14.0
+python-rocksdb==0.7.0
+python-rapidjson==0.9.1
+kawpow==0.9.4.4
+msgpack~=1.0.2
+aiorpcX~=0.22.1
+asyncio~=3.4.3
+lbryschema==0.0.16
+beaker==1.11.0
+pylru~=1.2.0
+python-rapidjson==0.9.1

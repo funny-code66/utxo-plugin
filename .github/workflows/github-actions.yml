@@ -1,0 +1,30 @@
+name: build docker
+on: [push]
+jobs:
+
+  build:
+    runs-on: self-hosted
+    steps:
+    - uses: actions/checkout@v2
+    - name: Login to DockerHub
+      run: echo ${{ secrets.org_blocknetdximg_password }} | docker login --username ${{ secrets.org_blocknetdximg_username }} --password-stdin
+
+    # Build images
+    - name: INFO BUILD
+      run: echo ${{ github.event.inputs.path }} ${{ github.event.inputs.image }} ${{ github.event.inputs.version }}
+    - name: Get the version
+      id: vars
+      run: echo ::set-output name=tag::$(echo ${GITHUB_REF#refs/heads/})
+    - name: build an image
+      run: docker build . --file Dockerfile --tag blocknetdx/utxo-plugin:${{steps.vars.outputs.tag}}
+    - name: push image
+      run: docker push blocknetdx/utxo-plugin:${{steps.vars.outputs.tag}}
+    - name: build an image
+      if: github.ref == 'refs/heads/master'
+      run: docker build . --file Dockerfile --tag blocknetdx/utxo-plugin:latest
+    - name: push image
+      if: github.ref == 'refs/heads/master'
+      run: docker push blocknetdx/utxo-plugin:latest
+    - name: Remove dangling images
+      if: ${{ always() }}
+      run: yes | docker image prune
